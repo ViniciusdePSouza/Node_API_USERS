@@ -5,7 +5,7 @@ const Mongo = require("./database/mongo");
 
 const main = async () => {
   dotenv.config();
-  
+
   const app = express();
   app.use(cors());
   app.use(express.json());
@@ -21,6 +21,22 @@ const main = async () => {
     const getUserController = new GetUsersController(mongoGetUsersRepository);
 
     const { body, statusCode } = await getUserController.handle();
+
+    res.status(statusCode).send(body);
+  });
+
+  app.post("/users", async (req, res) => {
+    const MongoPostUsersRepository = require("./repositories/postUsers/MongoPostUsers");
+    const PostUsersController = require("./controllers/postUsers/postUsers");
+
+    const mongoPostUsersRepository = new MongoPostUsersRepository();
+    const postUsersController = new PostUsersController(
+      mongoPostUsersRepository
+    );
+
+    const { body, statusCode } = await postUsersController.handle({
+      body: req.body,
+    });
 
     res.status(statusCode).send(body);
   });
