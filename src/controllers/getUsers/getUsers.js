@@ -1,4 +1,4 @@
-export class GetUsersController {
+ class GetUsersController {
   constructor(getUsersRepository) {
     this.getUsersRepository = getUsersRepository;
   }
@@ -19,3 +19,5 @@ export class GetUsersController {
     }
   }
 }
+
+module.exports = GetUsersController
