@@ -1,12 +1,9 @@
- class MongoGetUsersRepository {
-    async getUsers() {
-        return[ {
-            firstName: 'John',
-            lastName: 'John',
-            email: 'john@example.com',
-            password: 'password'
-        }]
-    }
+const Mongo = require("../../database/mongo");
+class MongoGetUsersRepository {
+  async getUsers() {
+    const users = await Mongo.db.collection("users").find({}).toArray();
+    return users;
+  }
 }
 
-module.exports = MongoGetUsersRepository
+module.exports = MongoGetUsersRepository;
