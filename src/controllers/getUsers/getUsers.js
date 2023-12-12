@@ -1,3 +1,6 @@
+const { ok } = require("../helpers");
+const { badRequest } = require("../helpers");
+ 
  class GetUsersController {
   constructor(getUsersRepository) {
     this.getUsersRepository = getUsersRepository;
@@ -7,15 +10,9 @@
     try {
       const users = await this.getUsersRepository.getUsers();
 
-      return {
-        statusCode: 200,
-        body: users
-      }
+      return ok(200, users) 
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: "something went wrong",
-      };
+      return badRequest(500, "something went wrong");
     }
   }
 }

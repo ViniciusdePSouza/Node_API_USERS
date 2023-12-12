@@ -1,4 +1,6 @@
 const validator = required('validator');
+const {badRequest} = required('../helpers.js');
+const {ok} = required('../ok.js');
 
 class PostUsersController {
   constructor(postUsersRepository) {
@@ -11,30 +13,20 @@ class PostUsersController {
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field].length) {
-          return {
-            statusCode: 400,
-            body: `${field} not found`,
-          };
+          return badRequest(400, `${field} not found`)
         }
       }
 
       const isEmailValid = validator.isEmail(httpRequest.body.email)
 
       if(!isEmailValid) {
-        return {
-          statusCode: 400,
-          body: `email not valid`,
-        };
+        return  badRequest(400, `email not valid`)
       }
 
       const user = await this.postUsersRepository().createUser(httpRequest.body);
 
-      console.log("chegando aqui");
+      return ok(201, user)
 
-      return {
-        statusCode: 201,
-        body: user,
-      };
     } catch (error) {
       return { statusCode: 500, body: "something went wrong" };
     }

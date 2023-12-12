@@ -1,7 +1,10 @@
+const { ok } = require("../helpers");
+const { badRequest } = require("../helpers");
+
 class patchUserController {
-constructor(patchUserRepository) {
-  this.patchUserRepository = patchUserRepository;
-}
+  constructor(patchUserRepository) {
+    this.patchUserRepository = patchUserRepository;
+  }
 
   async handle(httpRequest) {
     try {
@@ -9,34 +12,22 @@ constructor(patchUserRepository) {
       const { body } = httpRequest.body;
 
       if (!id) {
-        return {
-          statusCode: 400,
-          body: "Body missing required id",
-        };
+        return badRequest(400, "Body missing required id");
       }
       const allowedFieldsToUpdate = ["firstName", "lastName", "password"];
       const isFieldNotAllowed = Object.keys(body).some(
         (key) => !allowedFieldsToUpdate.includes(key)
       );
 
-      if(isFieldNotAllowed) {
-        return {
-          statusCode: 400,
-          body: 'Field not allowed'
-        }
+      if (isFieldNotAllowed) {
+        return badRequest(400, "Field not allowed");
       }
 
-      const user = await this.patchUserRepository.updateUser(id, body)
+      const user = await this.patchUserRepository.updateUser(id, body);
 
-      return {
-        statusCode: 200,
-        body: user
-      };
+      return ok(200, user);
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: "Something went wrong",
-      };
+      return badRequest(500, "Something went wrong");
     }
   }
 }

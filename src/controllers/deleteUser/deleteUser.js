@@ -1,3 +1,6 @@
+const { ok } = require("../helpers");
+const { badRequest } = require("../helpers");
+
 class DeleteUserController {
   constructor(deleteUserRepository) {
     this.deleteUserRepository = deleteUserRepository;
@@ -9,24 +12,17 @@ class DeleteUserController {
         const { id } = httpRequest.params.id;
 
         if (!id) {
-          return {
-            statusCode: 400,
-            body: "Id required",
-          };
+          return badRequest(400, "Id required");
         }
 
         const user = await this.deleteUserRepository.deleteUser(id);
 
-        return {
-          statusCode: 200,
-          body: user,
-        };
+        return ok(200, user);
       } catch (error) {
-        return {
-          statusCode: 500,
-          body: "Something went wrong",
-        };
+        return badRequest(500, "Something went wrong");
       }
     }
   }
 }
+
+module.exports = DeleteUserController;
