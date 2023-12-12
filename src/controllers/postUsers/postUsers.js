@@ -1,21 +1,35 @@
+const validator = required('validator');
+
 class PostUsersController {
   constructor(postUsersRepository) {
     this.postUsersRepository = postUsersRepository;
   }
+
   async handle(httpRequest) {
     try {
-      console.log(httpRequest);
-      const { body } = httpRequest;
+      const requiredFields = ["firstName", "lastName", "password", "email"];
 
-      console.log(body);
-      if (!body) {
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field].length) {
+          return {
+            statusCode: 400,
+            body: `${field} not found`,
+          };
+        }
+      }
+
+      const isEmailValid = validator.isEmail(httpRequest.body.email)
+
+      if(!isEmailValid) {
         return {
           statusCode: 400,
-          body: "Please enter a body",
+          body: `email not valid`,
         };
       }
 
-      const user = await this.postUsersRepository().createUser(body);
+      const user = await this.postUsersRepository().createUser(httpRequest.body);
+
+      console.log("chegando aqui");
 
       return {
         statusCode: 201,

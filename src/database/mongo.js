@@ -1,4 +1,4 @@
-const { MongoClient, Db } = require("mongodb");
+const { MongoClient } = require("mongodb");
 
 const Mongo = {
   client: undefined,
