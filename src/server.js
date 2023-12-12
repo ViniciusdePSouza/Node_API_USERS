@@ -39,6 +39,21 @@ const main = async () => {
     res.status(statusCode).send(body);
   });
 
+  app.patch("/users/:id", async (req, res) => {
+    const UserPatchRepository = require('./repositories/patchUser/MongoPatchUser')
+    const UserPatchController = require('./controllers/patchUser/patchUser')
+
+    const userPatchRepository = new UserPatchRepository()
+    const userPatchController = new UserPatchController(userPatchRepository)
+
+    const {body, statusCode} = await userPatchController.handle({
+      params: req.params,
+      body: req.body,
+    })
+
+    res.status(statusCode).send(body)
+  })
+
   app.listen(PORT, () => console.log("listening on port", PORT));
 };
 

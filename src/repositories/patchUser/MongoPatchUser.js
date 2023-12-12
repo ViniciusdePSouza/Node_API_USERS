@@ -2,6 +2,8 @@ const Mongo = require("../../database/mongo");
 const { newObjectId } = require("mongodb");
 
 class MongoPatchUserRepository {
+
+  
   async updateUser(params, id) {
     await Mongo.db.collection("users").updateOne(
       { _id: newObjectId(id) },
