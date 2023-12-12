@@ -40,19 +40,35 @@ const main = async () => {
   });
 
   app.patch("/users/:id", async (req, res) => {
-    const UserPatchRepository = require('./repositories/patchUser/MongoPatchUser')
-    const UserPatchController = require('./controllers/patchUser/patchUser')
+    const UserPatchRepository = require("./repositories/patchUser/MongoPatchUser");
+    const UserPatchController = require("./controllers/patchUser/patchUser");
 
-    const userPatchRepository = new UserPatchRepository()
-    const userPatchController = new UserPatchController(userPatchRepository)
+    const userPatchRepository = new UserPatchRepository();
+    const userPatchController = new UserPatchController(userPatchRepository);
 
-    const {body, statusCode} = await userPatchController.handle({
+    const { body, statusCode } = await userPatchController.handle({
       params: req.params,
       body: req.body,
-    })
+    });
+
+    res.status(statusCode).send(body);
+  });
+
+  app.delete("/users/:id", async (req, res) => {
+    const MongoUserDeleteRepository = require("./repositories/deleteUser/MongoDeleteUser");
+    const UserDeleteController = require("./controllers/deleteUser/deleteUser");
+
+    const mongoUserDeleteRepository = new MongoUserDeleteRepository();
+    const userDeleteController = new UserDeleteController(
+      mongoUserDeleteRepository
+    );
+
+    const { statusCode, body } = await userDeleteController.handle({
+      params: req.params,
+    });
 
     res.status(statusCode).send(body)
-  })
+  });
 
   app.listen(PORT, () => console.log("listening on port", PORT));
 };
