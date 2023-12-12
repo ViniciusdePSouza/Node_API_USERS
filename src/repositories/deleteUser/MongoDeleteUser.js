@@ -11,10 +11,7 @@ class MongoDeleteUserRepository {
 
         if(deletedCount === 0) throw new Error('User not deleted')
 
-        return {
-            statusCode: 200,
-            body: 'User successfully deleted'
-        }
+        return user
     }
 }
 
